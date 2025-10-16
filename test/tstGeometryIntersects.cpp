@@ -101,6 +101,26 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(intersects_sphere_box, Coordinate,
   BOOST_TEST(!intersects(sphere, Box{{{1., 2., 3.}}, {{4., 5., 6.}}}));
 }
 
+BOOST_AUTO_TEST_CASE_TEMPLATE(intersects_sphere_triangle, Coordinate,
+                              CoordinatesList)
+{
+  using ArborX::Details::intersects;
+  using Triangle = ArborX::Triangle<3, Coordinate>;
+  using Sphere = ArborX::Sphere<3, Coordinate>;
+
+  constexpr triangle1 =
+      Triangle{{{1., 0., 0.}}, {{2., 0., 0.}}, {{1., 2., 0.}}};
+  constexpr triangle2 =
+      Triangle{{{2., 0., 0.}}, {{0., 1., 0.}}, {{2., 1., 0.}}};
+  constexpr triangle3 =
+      Triangle{{{3., 0., 0.}}, {{0., 1., 0.}}, {{3., 1., 0.}}};
+
+  constexpr Sphere sphere{{{0., 0., 0.}}, 2.};
+  BOOST_TEST(intersects(sphere, triangle1));  // inside
+  BOOST_TEST(intersects(sphere, triangle2));  // boundary
+  BOOST_TEST(!intersects(sphere, triangle3)); // outside
+}
+
 BOOST_AUTO_TEST_CASE_TEMPLATE(intersects_point_triangle, Coordinate,
                               CoordinatesList)
 {
